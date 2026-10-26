@@ -1,6 +1,6 @@
 // Game data. Later ages (Copper, Bronze, Iron, Silver, Gold, Castle, Imperial, Heroic, Mythical)
 // are added by appending entries to AGES with the same shape.
-const VERSION = 'v1.2.0';
+const VERSION = 'v1.2.1';
 const CLASSES = {
   warrior: { name: 'Warrior', main: 'str', desc: 'Melee bruiser. Scales with STR. +30% HP and takes 20% less damage.', tool: 'club', style: 'skull', outfit: '#e8862e', hp: 1.3, dr: 0.2 },
   hunter: { name: 'Hunter', main: 'dex', desc: 'Ranged sharpshooter. Scales with DEX. Double crit chance, crits hit harder, attacks faster.', tool: 'bow', style: 'long', outfit: '#6aa84f', critMul: 2, spd: 0.25 },
