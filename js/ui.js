@@ -205,7 +205,7 @@
     }
     if (s().loot.length && !ui.modal) lootModal();
   }
-  function anim(sel, c) { const el = $(sel); if (!el) return; el.classList.remove(c); void el.offsetWidth; el.classList.add(c); }
+  function anim(sel, c) { const el = typeof sel === 'string' ? $(sel) : sel; if (!el) return; el.classList.remove(c); void el.offsetWidth; el.classList.add(c); }
 
   // ---------- popups ----------
   function statRows(g, cur) {

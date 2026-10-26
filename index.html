@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#5a3a1e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="app-version" content="v1.0.0">
+<title>Ages Idle RPG</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- Ages Idle RPG v1.0.0 -->
+<div id="app" data-version="v1.0.0">
+  <header id="top">
+    <div class="row1">
+      <button id="avatar" data-act="tab" data-arg="hero" aria-label="Hero"><span id="avatarArt"></span><b id="lvl">Lv 1</b></button>
+      <div class="pill"><span id="icoCoin"></span><b id="coins">0</b></div>
+      <div class="pill"><span id="icoGem"></span><b id="gems">0</b></div>
+      <div class="pill"><span id="icoEn"></span><b id="energy">0</b></div>
+      <button id="btnSettings" class="iconbtn" data-act="settings" aria-label="Settings">&#9776;</button>
+    </div>
+    <div class="row2"><div id="pips"></div><button id="areaTag" data-act="tab" data-arg="hunt">1-1</button></div>
+  </header>
+  <main id="view"></main>
+  <nav id="nav">
+    <button data-act="tab" data-arg="base">Base</button>
+    <button data-act="tab" data-arg="shop">Shop</button>
+    <button data-act="tab" data-arg="hunt">Hunt</button>
+    <button data-act="tab" data-arg="helpers">Helpers</button>
+    <button data-act="tab" data-arg="upgrades">Upgrades</button>
+    <button data-act="tab" data-arg="hero">Hero</button>
+  </nav>
+  <div id="fx"></div>
+  <div id="modal" hidden><div class="dialog"><div class="dhead"><h2 id="mTitle"></h2><button class="close" data-act="close" aria-label="Close">&#10005;</button></div><div id="mBody" class="dbody"></div></div></div>
+  <div id="updateBar" hidden><button data-act="reload">Update available, tap to reload</button></div>
+  <div id="toast"></div>
+</div>
+<script src="js/data.js"></script>
+<script src="js/art.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
