@@ -47,6 +47,9 @@ await pg.screenshot({ path: out + '390x664-hunt.png' });
 const res = await pg.evaluate(() => { let bosses = 0; for (let i = 0; i < 20000 && bosses < 2; i++) { G.tick(0.1); for (const e of G.events) if (e.type === 'win' && e.boss) bosses++; G.events.length = 0; while (G.s.loot.length) { const g = G.s.loot[0]; G.gearScore(g) > G.gearScore(G.s.hero.gear[g.slot]) ? G.equip(g.id) : G.dropLoot(g.id); } while (G.s.hero.pts) G.allocate('dex'); if (G.s.energy < 1) G.s.energy = 50; } return { bosses, area: G.s.hunt.area, stage: G.s.hunt.stage, lv: G.s.hero.lv, gear: Object.keys(G.s.hero.gear) }; });
 console.log('hunt ff', JSON.stringify(res));
 // force a loot popup screenshot
+// forced boss fight (stage 10), shot with no popup, then with the loot popup over it
+await pg.evaluate(() => { G.s.hunt.auto = false; G.s.hunt.stage = 10; G.s.hunt.fight = null; G.s.hunt.rest = 0; G.s.loot = []; G.startFight ? G.startFight() : 0; if (!G.s.hunt.fight) { G.s.hunt.fight = { mon: G.makeMonster(), php: 999, pmax: 999, pt: 0, mt: 9 }; } G.s.hunt.fight.mt = -99; G.s.hunt.fight.pt = -99; }); await new Promise(r => setTimeout(r, 600));
+await pg.screenshot({ path: out + '390x664-boss.png' });
 await pg.evaluate(() => { G.s.loot.push(G.makeGear(12, true)); }); await new Promise(r => setTimeout(r, 400));
 await pg.screenshot({ path: out + '390x664-loot.png' }); await pg.click('[data-act="equip"]');
 await pg.evaluate(() => { G.s.hunt.auto = false; });

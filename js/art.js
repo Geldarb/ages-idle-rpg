@@ -210,6 +210,10 @@ const Art = {
     out += `<rect x="0" y="0" width="400" height="120" fill="#6fae3a"/>`;
     out += blob(back.map(([a, b, c]) => [a, b, c]), '#5d9a32', 3) + back.map(([a, b, c]) => `<circle cx="${a - 4}" cy="${b - 6}" r="${c * 0.5}" fill="#74b23e"/>`).join('');
     out += front.map(([a, b, c]) => `<path d="M${a - 5} 120 L${a - 4} ${b + 10} L${a + 4} ${b + 10} L${a + 5} 120Z" fill="#9a6232" stroke="${OL}" stroke-width="3"/>` + blob([[a - c * 0.6, b, c * 0.7], [a + c * 0.6, b, c * 0.7], [a, b - c * 0.5, c * 0.85]], '#86c23f', 3) + `<circle cx="${a - 3}" cy="${b - c * 0.7}" r="${c * 0.35}" fill="#a6d84e"/>`).join('');
+    let edge = 'M-2 122 L-2 110'; for (let i = 0; i <= 400; i += 20) edge += ` Q${i + 10} ${103 + rnd() * 3} ${i + 20} 110`;
+    out += `<path d="${edge} L402 122Z" fill="#7cc544" stroke="${OL}" stroke-width="2.5"/>`;
+    for (let i = 8; i < 400; i += 26 + rnd() * 22) { const h = 7 + rnd() * 5; out += `<path d="M${i} 112 Q${i + 1} ${112 - h * 0.6} ${i + 3} ${112 - h} Q${i + 4} ${112 - h * 0.4} ${i + 6} 112 Q${i + 7} ${112 - h * 0.8} ${i + 11} ${112 - h * 0.9} Q${i + 10} ${112 - h * 0.3} ${i + 12} 112Z" fill="#5aa22e" stroke="${OL}" stroke-width="1.8" stroke-linejoin="round"/>`; }
+    out += `<rect x="-2" y="114" width="404" height="8" fill="#7cc544"/>`;
     return svg('0 0 400 120', out, 'backdrop').replace('<svg ', '<svg preserveAspectRatio="xMidYMax slice" ');
   },
 };

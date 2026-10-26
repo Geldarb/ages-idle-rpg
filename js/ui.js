@@ -68,12 +68,12 @@
       const sellers = s().helpers.filter(h => h.task === 'sell');
       const scene = `<div class="scene shop-scene" id="scene"><div class="bd-forest short">${A.forest(7)}</div><div class="path"></div>
         <div class="deco" style="left:1%;top:22%;width:11%;height:30%">${A.torch()}</div><div class="deco" style="right:1%;top:22%;width:11%;height:30%">${A.torch()}</div>
-        <div class="deco" style="left:84%;top:86%;width:7%;height:6%">${A.tuft()}</div><div class="deco" style="left:30%;top:90%;width:6%;height:5%">${A.pebble()}</div>
-        <div class="queue">${cs || '<div style="align-self:center;background:rgba(59,38,20,.7);color:#fff;padding:4px 10px;border-radius:8px;font-size:13px">Waiting for customers...</div>'}</div>
-        <div class="counter"></div>
+        <div class="deco" style="left:90%;top:90%;width:7%;height:6%">${A.tuft()}</div><div class="deco" style="left:30%;top:90%;width:6%;height:5%">${A.pebble()}</div>
         <div class="shopkeep">${heroArt({ tool: null })}</div>
-        ${sellers.map((x, i) => `<div style="position:absolute;top:62%;left:${70 + i * 13}%;width:14%;max-width:60px;height:34%">${A.caveman({ ...LOOKS[x.look] })}</div>`).join('')}
-        <div class="deco" style="left:3%;top:68%;width:17%;height:28%">${A.fire()}</div>
+        ${sellers.map((x, i) => `<div class="seller" style="left:${64 + i * 12}%">${A.caveman({ ...LOOKS[x.look] })}</div>`).join('')}
+        <div class="counter"></div>
+        <div class="queue">${cs || '<div style="align-self:center;background:rgba(59,38,20,.7);color:#fff;padding:4px 10px;border-radius:8px;font-size:13px">Waiting for customers...</div>'}</div>
+        <div class="deco" style="left:1%;top:72%;width:13%;height:22%">${A.fire()}</div>
       </div>`;
       const ul = G.unlocked();
       return scene + `<div class="panel">

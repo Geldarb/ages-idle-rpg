@@ -257,3 +257,32 @@ h3 .small { color: #e8eeff; opacity: .9; }
   #pips { height: 18px; } .pip { width: 13px; height: 13px; font-size: 8px; } .pip.boss { width: 16px; height: 16px; }
   .scene, .hunt-scene { border-bottom: 0; border-right: 4px solid var(--ol); }
 }
+
+/* ===== v1.1 polish: display font, shop depth ===== */
+@font-face { font-family: 'Lilita One'; src: url('fonts/lilita-one.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+:root { --disp: 'Lilita One', "Arial Rounded MT Bold", system-ui, sans-serif; }
+.pill b, #avatar b, #areaTag, h2, h3, .btn, #nav button, .lbl, .mname, .status, .float, .recipe b, .cust .bub + *, .loot .rows, .rarity, .big-num, .dhead h2, .stock .it b { font-family: var(--disp); font-weight: 400; letter-spacing: .3px; }
+.pill b, #areaTag, .btn, #nav button, h3, .dhead h2, .mname, .status, .lbl { color: #fff; text-shadow: -1.5px -1.5px 0 #1a1020, 1.5px -1.5px 0 #1a1020, -1.5px 1.5px 0 #1a1020, 1.5px 1.5px 0 #1a1020, 0 3px 0 #1a1020; }
+.pill b { font-size: 17px; }
+#nav button { font-size: 14px; }
+#nav button.on { color: #fff; text-shadow: -1.5px -1.5px 0 #6a3000, 1.5px -1.5px 0 #6a3000, -1.5px 1.5px 0 #6a3000, 1.5px 1.5px 0 #6a3000, 0 3px 0 #6a3000; }
+.btn { font-size: 17px; }
+.btn:disabled, .btn.grey { text-shadow: -1px -1px 0 #4a4038, 1px -1px 0 #4a4038, -1px 1px 0 #4a4038, 1px 1px 0 #4a4038, 0 2px 0 #4a4038; }
+.dhead h2 { font-size: 24px; }
+.float { text-shadow: -1.5px -1.5px 0 #1a1020, 1.5px -1.5px 0 #1a1020, -1.5px 1.5px 0 #1a1020, 1.5px 1.5px 0 #1a1020, 0 3px 0 #1a1020; }
+/* shop: shopkeeper behind counter, customers queue in front facing it */
+.shop-scene .path { top: auto; bottom: 0; height: 40%; }
+.shopkeep { top: 19%; height: 36%; width: 22%; max-width: 84px; z-index: 1; }
+.seller { position: absolute; top: 22%; width: 14%; max-width: 60px; height: 32%; z-index: 1; }
+.counter { top: 41%; height: 14%; z-index: 2; }
+.queue { top: 50%; height: 48%; z-index: 3; }
+.cust .fig { height: 70%; }
+.cust .bub { top: 0; width: 56%; }
+.shop-scene .deco { z-index: 0; }
+.shopkeep { top: 14%; height: 42%; }
+.seller { top: 18%; height: 36%; }
+.counter { top: 45%; height: 12%; }
+.queue { top: 52%; height: 40%; }
+#nav button { font-size: 13px; padding-left: 0; padding-right: 0; letter-spacing: 0; overflow: hidden; }
+.res .pill b { color: #3b2614; text-shadow: 0 1px 0 #fff; }
+@media (max-width: 375px) { .pill b { font-size: 14px; letter-spacing: 0; } .pill svg.ico { width: 19px; height: 19px; } }
