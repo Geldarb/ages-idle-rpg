@@ -66,7 +66,7 @@ const Art = {
       ${mouth}
       <ellipse cx="33" cy="69" rx="4" ry="2.3" fill="#f0806a" opacity=".55"/><ellipse cx="67" cy="69" rx="4" ry="2.3" fill="#f0806a" opacity=".55"/>
       ${front}
-      <g transform="translate(72 100) rotate(-18)">${tool}</g>
+      <g transform="${o.tool === 'bow' ? 'translate(84 106) rotate(8) scale(.85)' : 'translate(72 100) rotate(-18)'}">${tool}</g>
       <path d="M67 88 Q78 94 74 102" stroke="${OL}" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M67 88 Q78 94 74 102" stroke="${skin}" stroke-width="4" fill="none" stroke-linecap="round"/>
       <circle cx="73" cy="102" r="5" fill="${skin}" stroke="${OL}" stroke-width="2.5"/>`;
     return svg('0 0 100 140', o.flip ? `<g transform="translate(100 0) scale(-1 1)">${body}</g>` : body, o.cls || 'sprite');
