@@ -1,0 +1,1 @@
+{ "name": "ages-idle-rpg", "version": "1.0.0", "private": true, "description": "Ages Idle RPG - browser idle incremental RPG (Stone Age v1)", "scripts": { "start": "node server.js", "sim": "node tests/sim.js" }, "engines": { "node": ">=18" } }
