@@ -90,7 +90,7 @@
     sig: () => { const H = s().hunt; return [H.area, H.maxArea, H.fight ? H.fight.mon.name + H.fight.mon.lv : 'none', H.auto, H.finalBeaten].join('|'); },
     build() {
       const H = s().hunt, ag = D.AGES[s().age], ar = ag.areas[H.area], f = H.fight;
-      const mon = f ? f.mon : null;
+      const mon = f ? f.mon : (H.stage === 10 ? { ...ar.boss, boss: true, lv: G.monIdx() + 1 } : { ...ar.monsters[H.stage % ar.monsters.length], boss: false, lv: G.monIdx() + 1 });
       const scene = `<div class="scene hunt-scene" id="scene" style="background:linear-gradient(${ar.bg} 0 60%, #e2c58a 60%)">
         <div class="fence"></div>
         <div style="position:absolute;left:40%;top:8%;width:14%;height:18%">${A.bush()}</div>
@@ -111,7 +111,7 @@
       const H = s().hunt, f = H.fight;
       $('#hStage').textContent = H.stage; $('#kills').textContent = fmt(s().stats.kills);
       if (f) { $('#hpHero').style.width = (f.php / f.pmax * 100) + '%'; const m = $('#hpMon'); if (m) m.style.width = (f.mon.hp / f.mon.maxHp * 100) + '%'; }
-      else $('#hpHero').style.width = '100%';
+      else { $('#hpHero').style.width = '100%'; const m = $('#hpMon'); if (m) m.style.width = '100%'; }
       $('#hStatus').textContent = H.rest > 0 ? 'Recovering...' : s().loot.length ? 'Loot waiting!' : !f && s().energy < 1 ? 'Out of energy, resting...' : !f && !H.auto ? 'Ready' : f ? `HP ${fmt(f.php)}` : 'Searching...';
     },
   };
