@@ -30,12 +30,13 @@
       const h = (t) => s().helpers.filter(x => x.task === t);
       const hfig = (x, l, b, w = 13) => `<div style="position:absolute;left:${l}%;bottom:${b}%;width:${w}%;height:34%;pointer-events:none">${A.caveman({ ...LOOKS[x.look], tool: x.task === 'chop' ? 'axe' : x.task === 'mine' ? 'pick' : 'hammer', flip: x.task === 'mine' })}</div>`;
       const scene = `<div class="scene base-scene" id="scene">
-        <div style="position:absolute;left:-4%;top:-10%;width:30%;height:44%">${A.tree({ g: '#6db33a' })}</div>
-        <div style="position:absolute;left:56%;top:-14%;width:26%;height:40%">${A.tree({ g: '#86c84a' })}</div>
-        <div style="position:absolute;left:80%;top:-8%;width:28%;height:42%">${A.tree({ g: '#6db33a' })}</div>
+        <div class="bd-forest">${A.forest(3)}</div>
+        <div class="deco" style="left:6%;top:56%;width:7%;height:6%">${A.tuft()}</div><div class="deco" style="left:60%;top:84%;width:7%;height:6%">${A.tuft()}</div><div class="deco" style="left:88%;top:80%;width:7%;height:6%">${A.tuft('#7ab83a')}</div>
+        <div class="deco" style="left:20%;top:90%;width:6%;height:5%">${A.pebble()}</div><div class="deco" style="left:92%;top:40%;width:6%;height:5%">${A.pebble()}</div>
+        <div class="deco" style="left:82%;top:84%;width:16%;height:15%">${A.logs()}</div>
         <div class="tap" data-act="chop" id="tTree" style="left:22%;top:-2%;width:34%;height:50%">${A.tree()}<span class="lbl">Tap: chop</span></div>
         <div class="tap" data-act="mine" id="tRock" style="left:66%;top:44%;width:32%;height:30%">${A.rock()}<span class="lbl">Tap: mine</span></div>
-        <div style="position:absolute;left:2%;top:50%;width:14%;height:10%">${A.bush()}</div>
+        <div class="deco" style="left:1%;top:44%;width:15%;height:11%">${A.bush()}</div>
         <div style="position:absolute;left:4%;top:80%;width:16%;height:16%">${A.stump()}</div>
         <div class="tap" data-act="anvil" id="tAnvil" style="left:28%;top:62%;width:28%;height:30%">${A.anvil()}<div class="prog"><i id="craftProg"></i></div><span class="lbl">Tap: craft</span></div>
         <div style="position:absolute;left:50%;top:44%;width:17%;height:54%;pointer-events:none">${heroArt({ tool: 'hammer' })}</div>
@@ -65,12 +66,14 @@
     build() {
       const cs = s().customers.map((c, i) => `<div class="cust" data-act="sell" data-arg="${c.id}" id="c${c.id}"><div class="bub" data-want="${c.want}">${A.weapon(c.want)}</div><div class="fig">${A.caveman({ ...LOOKS[c.look] })}</div><div class="pat"><i data-pat="${c.id}"></i></div></div>`).join('');
       const sellers = s().helpers.filter(h => h.task === 'sell');
-      const scene = `<div class="scene shop-scene" id="scene">
+      const scene = `<div class="scene shop-scene" id="scene"><div class="bd-forest short">${A.forest(7)}</div><div class="path"></div>
+        <div class="deco" style="left:1%;top:22%;width:11%;height:30%">${A.torch()}</div><div class="deco" style="right:1%;top:22%;width:11%;height:30%">${A.torch()}</div>
+        <div class="deco" style="left:84%;top:86%;width:7%;height:6%">${A.tuft()}</div><div class="deco" style="left:30%;top:90%;width:6%;height:5%">${A.pebble()}</div>
         <div class="queue">${cs || '<div style="align-self:center;background:rgba(59,38,20,.7);color:#fff;padding:4px 10px;border-radius:8px;font-size:13px">Waiting for customers...</div>'}</div>
         <div class="counter"></div>
         <div class="shopkeep">${heroArt({ tool: null })}</div>
         ${sellers.map((x, i) => `<div style="position:absolute;top:62%;left:${70 + i * 13}%;width:14%;max-width:60px;height:34%">${A.caveman({ ...LOOKS[x.look] })}</div>`).join('')}
-        <div style="position:absolute;left:3%;top:66%;width:16%;height:28%">${A.fire()}</div>
+        <div class="deco" style="left:3%;top:68%;width:17%;height:28%">${A.fire()}</div>
       </div>`;
       const ul = G.unlocked();
       return scene + `<div class="panel">
@@ -91,9 +94,10 @@
     build() {
       const H = s().hunt, ag = D.AGES[s().age], ar = ag.areas[H.area], f = H.fight;
       const mon = f ? f.mon : (H.stage === 10 ? { ...ar.boss, boss: true, lv: G.monIdx() + 1 } : { ...ar.monsters[H.stage % ar.monsters.length], boss: false, lv: G.monIdx() + 1 });
-      const scene = `<div class="scene hunt-scene" id="scene" style="background:linear-gradient(${ar.bg} 0 60%, #e2c58a 60%)">
-        <div class="fence"></div>
-        <div style="position:absolute;left:40%;top:8%;width:14%;height:18%">${A.bush()}</div>
+      const scene = `<div class="scene hunt-scene" id="scene" style="--abg:${ar.bg}">
+        <div class="bd-forest">${A.forest(H.area * 5 + 2)}</div>
+        <div class="stakes">${Array.from({ length: 9 }, () => A.stake()).join('')}</div>
+        <div class="deco" style="left:42%;top:30%;width:15%;height:14%">${A.bush()}</div><div class="deco" style="left:30%;top:86%;width:7%;height:6%">${A.tuft()}</div><div class="deco" style="left:60%;top:90%;width:6%;height:5%">${A.pebble()}</div>
         <div class="fighter hero" id="fHero"><div class="hpb bar hp"><i id="hpHero"></i></div>${heroArt()}</div>
         ${mon ? `<div class="fighter mon" id="fMon" style="${mon.boss ? 'width:48%;max-width:220px;height:70%' : ''}"><div class="hpb bar hp"><i id="hpMon"></i></div>${A.beast({ ...mon, crown: mon.boss })}</div><div class="mname ${mon.boss ? 'boss' : ''}">${mon.boss ? '☠ BOSS ' : ''}${mon.name} · Lv ${mon.lv}</div>` : ''}
         <div class="status" id="hStatus"></div>
