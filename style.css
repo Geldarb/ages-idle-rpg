@@ -286,3 +286,13 @@ h3 .small { color: #e8eeff; opacity: .9; }
 #nav button { font-size: 13px; padding-left: 0; padding-right: 0; letter-spacing: 0; overflow: hidden; }
 .res .pill b { color: #3b2614; text-shadow: 0 1px 0 #fff; }
 @media (max-width: 375px) { .pill b { font-size: 14px; letter-spacing: 0; } .pill svg.ico { width: 19px; height: 19px; } }
+
+/* v1.2: anvil order bubble + landscape toast */
+.anvil-order { position: absolute; right: -6%; top: -30%; width: 40%; aspect-ratio: 1; background: #fffdf5; border: 3px solid var(--ol); border-radius: 50%; padding: 6%; box-shadow: 0 3px 0 rgba(0,0,0,.2); z-index: 3; pointer-events: none; }
+.anvil-order::after { content: ''; position: absolute; left: 18%; bottom: -8px; border: 6px solid transparent; border-top: 8px solid var(--ol); border-bottom: 0; }
+.anvil-order.order { background: #fff3c4; }
+.anvil-order.blocked { background: #ffd6cc; animation: pulse 1.2s infinite; }
+.anvil-order.none { display: none; }
+.anvil-order svg { width: 100%; height: 100%; display: block; }
+#orderHint.warn { color: #c0392b; font-weight: bold; }
+@media (orientation: landscape) and (max-height: 520px) { #toast { top: auto; bottom: 56px; left: 25%; width: 46%; } }

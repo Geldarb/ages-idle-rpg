@@ -46,12 +46,34 @@
 
   // ---------- crafting ----------
   G.canAfford = (w) => G.s.wood >= w.wood && G.s.stone >= w.stone;
-  G.startJob = () => {
+  // Crafting follows customer orders: front of queue first, skipping wants already
+  // covered by shelf stock (or the job on the anvil). Falls back to the selected /
+  // best affordable recipe only when every order is covered or the queue is empty.
+  G.nextOrder = () => {
+    const have = { ...G.s.weapons }; if (G.s.job) have[G.s.job.id] = (have[G.s.job.id] || 0) + 1;
+    for (const c of G.s.customers) {
+      const w = G.weapon(c.want); if (!w || w.lv > G.s.anvil) continue;
+      if (have[c.want] > 0) { have[c.want]--; continue; }
+      return { w, cid: c.id };
+    }
+    return null;
+  };
+  G.need = (w) => ({ wood: Math.max(0, Math.ceil(w.wood - G.s.wood)), stone: Math.max(0, Math.ceil(w.stone - G.s.stone)) });
+  G.needText = (w) => { const n = G.need(w); const p = []; if (n.wood) p.push(`${n.wood} more wood`); if (n.stone) p.push(`${n.stone} more stone`); return p.length ? 'Need ' + p.join(' and ') : ''; };
+  G.fallbackRecipe = () => { const w = G.weapon(G.s.sel); return w && w.lv <= G.s.anvil && G.canAfford(w) ? w : G.unlocked().slice().reverse().find(G.canAfford); };
+  // What the anvil will craft next: { w, order: bool, blocked: bool }
+  G.craftPlan = () => {
+    if (G.s.job) return { w: G.weapon(G.s.job.id), order: false, blocked: false, busy: true };
+    const o = G.nextOrder();
+    if (o) return { w: o.w, order: true, cid: o.cid, blocked: !G.canAfford(o.w) };
+    const w = G.fallbackRecipe(); return w ? { w, order: false, blocked: false } : null;
+  };
+  G.startJob = (forceId) => {
     if (G.s.job) return true;
     if (G.shelfCount() >= G.shelfCap()) return false;
-    let w = G.weapon(G.s.sel);
-    if (!w || w.lv > G.s.anvil || !G.canAfford(w)) w = G.unlocked().slice().reverse().find(G.canAfford);
-    if (!w) return false;
+    let w;
+    if (forceId) { w = G.weapon(forceId); if (!w || w.lv > G.s.anvil || !G.canAfford(w)) return false; }
+    else { const p = G.craftPlan(); if (!p || p.blocked) return false; w = p.w; } // unaffordable order: wait for materials
     G.s.wood -= w.wood; G.s.stone -= w.stone;
     G.s.job = { id: w.id, p: 0 };
     return true;
@@ -76,7 +98,7 @@
 
   // ---------- shop ----------
   G.spawnCustomer = () => {
-    const ul = G.unlocked(); const inStock = ul.filter(w => G.s.weapons[w.id] > 0);
+    const ul = G.unlocked(); if (!ul.length) return; const inStock = ul.filter(w => G.s.weapons[w.id] > 0);
     const pool = inStock.length && rnd() < 0.75 ? inStock : ul;
     const w = pool[Math.floor(rnd() * pool.length)];
     const look = Math.floor(rnd() * 6);

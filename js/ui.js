@@ -38,7 +38,7 @@
         <div class="tap" data-act="mine" id="tRock" style="left:66%;top:44%;width:32%;height:30%">${A.rock()}<span class="lbl">Tap: mine</span></div>
         <div class="deco" style="left:1%;top:44%;width:15%;height:11%">${A.bush()}</div>
         <div style="position:absolute;left:4%;top:80%;width:16%;height:16%">${A.stump()}</div>
-        <div class="tap" data-act="anvil" id="tAnvil" style="left:28%;top:62%;width:28%;height:30%">${A.anvil()}<div class="prog"><i id="craftProg"></i></div><span class="lbl">Tap: craft</span></div>
+        <div class="tap" data-act="anvil" id="tAnvil" style="left:28%;top:62%;width:28%;height:30%">${A.anvil()}<div class="anvil-order" id="anvilOrder"></div><div class="prog"><i id="craftProg"></i></div><span class="lbl">Tap: craft</span></div>
         <div style="position:absolute;left:50%;top:44%;width:17%;height:54%;pointer-events:none">${heroArt({ tool: 'hammer' })}</div>
         ${h('chop').map((x, i) => hfig(x, 2 + i * 13, 52)).join('')}
         ${h('mine').map((x, i) => hfig(x, 74 + i * 12, 64, 12)).join('')}
@@ -51,12 +51,24 @@
         <div class="res"><div class="pill">${A.wood()}<b id="rWood"></b></div><div class="pill">${A.stone()}<b id="rStone"></b></div><div class="pill"><span>🗡</span><b id="rShelf"></b></div></div>
         <div class="card" style="margin-top:8px"><div class="flex"><div style="width:44px;height:40px">${A.anvil()}</div><div class="grow"><b>Stone Anvil Lv ${s().anvil}</b><div class="small">Weapons sell for x${(1 + 0.3 * (s().anvil - 1)).toFixed(1)}. Higher levels unlock recipes.</div></div>
         ${max ? '<span class="small">MAX</span>' : `<button class="btn gold" data-act="anvilUp" data-cost="${G.anvilCost()}">${A.coin()}${fmt(G.anvilCost())}</button>`}</div></div>
-        <h3>Recipes <span class="small">(helpers craft the selected one)</span></h3><div class="recipes">${recipes}</div></div>`;
+        <h3>Recipes <span class="small">(crafting follows customer orders)</span></h3><div class="small" id="orderHint" style="margin:-2px 0 6px">&nbsp;</div><div class="recipes">${recipes}</div></div>`;
     },
     update() {
       $('#rWood').textContent = `${fmt(s().wood)}/${fmt(G.resCap())}`; $('#rStone').textContent = `${fmt(s().stone)}/${fmt(G.resCap())}`; $('#rShelf').textContent = `${G.shelfCount()}/${G.shelfCap()}`;
       const j = s().job; $('#craftProg').style.width = j ? Math.min(100, j.p / G.weapon(j.id).time * 100) + '%' : '0%';
       $$('[data-w]').forEach(e => e.textContent = s().weapons[e.dataset.w] || 0);
+      const p = G.craftPlan(), ao = $('#anvilOrder'), hint = $('#orderHint');
+      const key = p ? `${p.w.id}|${p.order}|${p.blocked}|${p.busy}` : '';
+      if (ao.dataset.k !== key) { ao.dataset.k = key; ao.className = 'anvil-order' + (p ? '' : ' none') + (p && p.order ? ' order' : '') + (p && p.blocked ? ' blocked' : ''); ao.innerHTML = p ? A.weapon(p.w.id) : ''; }
+      if (hint) {
+        let t;
+        if (G.shelfCount() >= G.shelfCap()) t = 'Shelf full! Sell weapons in the Shop.';
+        else if (!p) t = 'Need more wood/stone. Tap the tree and rock!';
+        else if (p.busy) t = `Crafting ${p.w.name}…`;
+        else if (p.order) t = p.blocked ? `Next order: ${p.w.name}. ${G.needText(p.w)}.` : `Next order: ${p.w.name} for a waiting customer.`;
+        else t = s().customers.length ? `All orders covered. Stocking up: ${p.w.name}.` : `No customers waiting. Stocking up: ${p.w.name}.`;
+        if (hint.textContent !== t) { hint.textContent = t; hint.classList.toggle('warn', !!(p && p.blocked)); }
+      }
     },
   };
   function helperSig(t) { return s().helpers.filter(h => h.task === t).map(h => h.id).join(','); }
@@ -254,8 +266,9 @@
   const actions = {
     tab: (a) => showTab(a), close: () => closeModal(), settings: () => settingsModal(),
     chop: (a, el) => { G.chop(); anim(el, 'hit'); }, mine: (a, el) => { G.mine(); anim(el, 'hit'); },
-    anvil: (a, el) => { if (!G.tapAnvil()) toast(G.shelfCount() >= G.shelfCap() ? 'Shelf full! Sell weapons in the Shop.' : 'Need more wood/stone. Tap the tree and rock!'); anim(el, 'hit'); },
-    sel: (a) => { const w = G.weapon(a); if (w.lv > s().anvil) return toast(`Upgrade the anvil to Lv ${w.lv}`); s().sel = a; ui.sig = ''; },
+    anvil: (a, el) => { if (!G.tapAnvil()) { const p = G.craftPlan(); toast(G.shelfCount() >= G.shelfCap() ? 'Shelf full! Sell weapons in the Shop.' : p && p.blocked ? `${p.w.name} ordered: ${G.needText(p.w)}` : 'Need more wood/stone. Tap the tree and rock!'); } anim(el, 'hit'); },
+    sel: (a) => { const w = G.weapon(a); if (w.lv > s().anvil) return toast(`Upgrade the anvil to Lv ${w.lv}`); s().sel = a; ui.sig = '';
+      if (!s().job) { if (G.startJob(a)) toast(`Crafting ${w.name} - tap the anvil`); else if (G.shelfCount() >= G.shelfCap()) toast('Shelf full!'); else toast(`${w.name}: ${G.needText(w)}`); } },
     anvilUp: () => { if (G.upgradeAnvil()) toast('Anvil upgraded!'); },
     sell: (a) => { const i = s().customers.findIndex(c => c.id === +a); G.sell(i); },
     sellAll: () => { let n = 0; while (G.sellFirstPossible()) n++; if (!n) toast('Nothing in stock that customers want.'); },

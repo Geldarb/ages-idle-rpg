@@ -1,5 +1,5 @@
 // Minimal service worker: network-first for HTML/JS/CSS, cache fallback offline.
-const CACHE = 'ages-idle-v1.1.0';
+const CACHE = 'ages-idle-v1.2.0';
 const CORE = ['./', 'index.html', 'style.css', 'js/data.js', 'js/art.js', 'js/game.js', 'js/ui.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'fonts/lilita-one.woff2'];
 self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).catch(() => {})));
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())));
